@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const Listing = require("./models/Listing.js");
+const Review = require("./models/review.js");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
@@ -59,7 +60,7 @@ app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let listing = await Listing.findById(id);
+    let listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs", { listing });
   })
 );
@@ -97,6 +98,31 @@ app.delete(
   })
 );
 
+
+//Reviews
+//Post review Route
+app.post("/listings/:id/reviews", wrapAsync(async (req, res) => {
+  let listing = await Listing.findById(req.params.id);
+  let newReview = new Review(req.body.review);
+
+  listing.reviews.push(newReview);
+
+  await newReview.save();
+  await listing.save();
+  res.redirect(`/listings/${listing._id}`);
+}))
+
+//Delete review Route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync ( async (req, res) => {
+  let {id, reviewId} = req.params;
+
+  await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+  await Review.findByIdAndDelete(reviewId);
+
+  res.redirect(`/listings/${id}`);
+}))
+
+
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page not Found!"));
 });
@@ -111,3 +137,6 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
+
+
+
