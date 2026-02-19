@@ -18,11 +18,10 @@
             <textarea name="listing[description]" class="form-control" id="description" required></textarea>
             <div class="invalid-feedback">Please enter short description.</div>
           </div>
-
           <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
-            <input placeholder="enter image URL/Link" name="listing[image]" type="text" class="form-control"
-              id="image" />
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input name="listing[image]" type="file" class="form-control" id="image" required />
+            <div class="invalid-feedback">Please Upload Listing Image.</div>
           </div>
 
           <div class="row">
