@@ -27,7 +27,7 @@
           <div class="row">
             <div class="mb-3 col-md-4">
               <label for="price" class="form-label">Price</label>
-              <input placeholder="1200" name="listing[price]" type="number" class="form-control" id="price" required />
+              <input placeholder="1200" name="listing[price]" type="number" min="0" step="any" class="form-control" id="price" required />
               <div class="invalid-feedback">Price should be valid</div>
             </div>
 
@@ -46,6 +46,7 @@
             <div class="invalid-feedback">Location name should be valid</div>
           </div>
 
+          <%- include("../includes/listingCategories.ejs", { selectedCategories: [] }) %>
           <button class="btn btn-dark add-btn mt-3">Add</button>
           <br /><br />
         </form>

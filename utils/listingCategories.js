@@ -1,0 +1,16 @@
+module.exports = [
+  "Rooms",
+  "Iconic Cities",
+  "Mountains",
+  "Castles",
+  "Amazing Pools",
+  "Camping",
+  "Farms",
+  "Arctic",
+  "Boats",
+  "Domes",
+  "Villas",
+  "Beachfront",
+  "Cabins",
+  "Tiny Homes",
+];

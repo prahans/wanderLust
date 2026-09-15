@@ -1,24 +1,8 @@
 const mongoose = require("mongoose");
 const Review = require("./review.js");
+const LISTING_CATEGORIES = require("../utils/listingCategories");
 
 const Schema = mongoose.Schema;
-
-const LISTING_CATEGORIES = [
-  "Rooms",
-  "Iconic Cities",
-  "Mountains",
-  "Castles",
-  "Amazing Pools",
-  "Camping",
-  "Farms",
-  "Arctic",
-  "Boats",
-  "Domes",
-  "Villas",
-  "Beachfront",
-  "Cabins",
-  "Tiny Homes",
-];
 
 const listingSchema = new Schema(
   {
@@ -35,7 +19,7 @@ const listingSchema = new Schema(
     },
 
     image: {
-      url: String,
+      url: { type: String, required: true },
       filename: String,
     },
 
@@ -57,12 +41,17 @@ const listingSchema = new Schema(
       trim: true,
     },
 
-    categories: [
-      {
-        type: String,
-        enum: LISTING_CATEGORIES,
+    categories: {
+      type: [{ type: String, enum: LISTING_CATEGORIES }],
+      required: true,
+      validate: {
+        validator: (categories) => Array.isArray(categories)
+          && categories.length >= 1
+          && categories.length <= 3
+          && new Set(categories).size === categories.length,
+        message: "Please select between 1 and 3 different categories.",
       },
-    ],
+    },
 
     isTrending: {
       type: Boolean,

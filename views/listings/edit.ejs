@@ -16,8 +16,7 @@
 
           <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]" class="form-control" id="description" required>
-      <%= listing.title %></textarea>
+            <textarea name="listing[description]" class="form-control" id="description" required><%= listing.description %></textarea>
             <div class="invalid-feedback">Please enter short description.</div>
           </div>
 
@@ -28,20 +27,21 @@
 
           <div class="mb-3">
             <label for="image" class="form-label">Image</label>
-            <input value="<%= listing.image %>" name="listing[image]" type="file" class="form-control" id="image" />
+            <input name="listing[image]" type="file" class="form-control" id="image" />
+            <div class="form-text">Leave blank to keep the current photo.</div>
           </div>
 
           <div class="row">
             <div class="mb-3 col-md-4">
               <label for="price" class="form-label">Price</label>
-              <input value="<%= listing.price %>" name="listing[price]" type="number" class="form-control" id="price"
+              <input value="<%= listing.price %>" name="listing[price]" type="number" min="0" step="any" class="form-control" id="price"
                 required />
               <div class="invalid-feedback">Price should be valid</div>
             </div>
 
             <div class="mb-3 col-md-8">
               <label for="country" class="form-label">Country</label>
-              <input value="<%= listing.location %>" name="listing[location]" type="text" class="form-control"
+              <input value="<%= listing.country %>" name="listing[country]" type="text" class="form-control"
                 id="country" required />
               <div class="invalid-feedback">Country name should be valid</div>
             </div>
@@ -49,10 +49,12 @@
 
           <div class="mb-3">
             <label for="location" class="form-label">Location</label>
-            <input value="<%= listing.country %>" name="listing[country]" type="text" class="form-control" id="location"
+            <input value="<%= listing.location %>" name="listing[location]" type="text" class="form-control" id="location"
               required />
             <div class="invalid-feedback">Location name should be valid</div>
           </div>
+
+          <%- include("../includes/listingCategories.ejs", { selectedCategories: listing.categories || [] }) %>
 
           <button class="btn btn-dark mt-3 edit-btn">edit</button>
         </form>

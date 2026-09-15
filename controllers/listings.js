@@ -1,6 +1,7 @@
 const Listing = require("../models/Listing");
 const { cloudinary } = require("../cloudConfig");
 const ExpressError = require("../utils/ExpressError");
+const LISTING_CATEGORIES = require("../utils/listingCategories");
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find();
@@ -9,7 +10,7 @@ module.exports.index = async (req, res) => {
 
 
 module.exports.renderNewForm = (req, res) => {
-  res.render("listings/new.ejs");
+  res.render("listings/new.ejs", { listingCategories: LISTING_CATEGORIES });
 }
 
 module.exports.showListing = async (req, res) => {
@@ -42,7 +43,7 @@ module.exports.renderEditForm  = async (req, res) => {
     }
     let originalImageUrl = listing.image.url;
     originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
-    res.render("listings/edit.ejs", { listing, originalImageUrl });
+    res.render("listings/edit.ejs", { listing, originalImageUrl, listingCategories: LISTING_CATEGORIES });
   }
 
 module.exports.updateListing = async (req, res) => {
@@ -50,13 +51,13 @@ module.exports.updateListing = async (req, res) => {
       throw new ExpressError(400, "Send  valid data for listing");
     }
     let { id } = req.params;
-    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    // if(typeof req.file !== "undefined"){
-    //   let url = req.file.path;
-    //   let filename = req.file.filename;
-    //   listing.image = {url, filename};
-    //   await listing.save();
-    // }
+    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, {
+      runValidators: true,
+      new: true,
+    });
+    if (!listing) {
+      throw new ExpressError(404, "Listing you requested for does not exist!");
+    }
 
     if (typeof req.file !== "undefined") {
      if (listing.image && listing.image.filename) {

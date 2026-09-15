@@ -1,0 +1,28 @@
+<fieldset class="mb-3" data-category-group aria-describedby="category-hint category-error">
+  <legend class="form-label fs-6">Categories</legend>
+  <p class="text-muted small" id="category-hint">
+    Select 1 to 3 categories that best describe your listing.
+  </p>
+  <div class="row">
+    <% listingCategories.forEach(category => { %>
+      <% const categoryId = `category-${category.replace(/\s+/g, '-')}`; %>
+      <div class="col-md-4 mb-2">
+        <div class="form-check">
+          <input
+            class="form-check-input category-checkbox"
+            type="checkbox"
+            name="listing[categories][]"
+            value="<%= category %>"
+            id="<%= categoryId %>"
+            aria-describedby="category-hint category-error"
+            <%= selectedCategories.includes(category) ? "checked" : "" %>
+          />
+          <label class="form-check-label" for="<%= categoryId %>"><%= category %></label>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+  <div id="category-error" class="text-danger small mt-1" data-category-error role="alert" hidden>
+    Please select between 1 and 3 categories.
+  </div>
+</fieldset>
