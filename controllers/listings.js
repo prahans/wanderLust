@@ -1,5 +1,6 @@
 const Listing = require("../models/Listing");
-const cloudinary = require("cloudinary").v2;
+const { cloudinary } = require("../cloudConfig");
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find();
@@ -75,8 +76,23 @@ module.exports.updateListing = async (req, res) => {
 
 module.exports.destroyListing = async (req, res) => {
     let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
+    const listing = await Listing.findById(id);
+    if (!listing) {
+      req.flash("error", "Listing you requested for does not exist!");
+      return res.redirect("/listings");
+    }
+
+    if (listing.image && listing.image.filename) {
+      // Keep the listing available to retry if Cloudinary cleanup fails.
+      const result = await cloudinary.uploader.destroy(listing.image.filename, {
+        invalidate: true,
+      });
+      if (result.result !== "ok" && result.result !== "not found") {
+        throw new ExpressError(502, "Unable to delete listing photo. Please try again.");
+      }
+    }
+
+    await Listing.findByIdAndDelete(id);
     req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
   }
