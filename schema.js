@@ -1,6 +1,11 @@
 const Joi = require("joi");
 const LISTING_CATEGORIES = require("./utils/listingCategories");
 
+module.exports.listingQuerySchema = Joi.object({
+  search: Joi.string().trim().max(200).allow("").default(""),
+  category: Joi.string().trim().valid("Trending", ...LISTING_CATEGORIES).allow("").default(""),
+}).unknown(true);
+
 module.exports.listingSchema = Joi.object({
   listing: Joi.object({
     title: Joi.string().trim().required(),

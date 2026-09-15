@@ -69,6 +69,54 @@ body {
 .listing-link {
   text-decoration: none;
 }
+/* Listing category filters */
+#filters {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 1rem 0 0.25rem;
+}
+.filter {
+  flex: 0 0 auto;
+  min-width: 4.5rem;
+  padding: 0.75rem 0.25rem;
+  border-bottom: 3px solid transparent;
+  color: #222222;
+  text-align: center;
+  text-decoration: none;
+  opacity: 0.7;
+}
+.filter span {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.filter:hover,
+.filter.active {
+  opacity: 1;
+  border-bottom-color: #fe424d;
+}
+.filter.active {
+  color: #fe424d;
+  font-weight: 600;
+}
+.filter:focus-visible {
+  outline: 2px solid #fe424d;
+  outline-offset: -2px;
+}
+.clear-filters {
+  color: #222222;
+  font-size: 0.875rem;
+}
+.tax-info {
+  display: none;
+}
+.tax-toggle {
+  border: 1px solid #222222;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+}
 .card-img-overlay {
   opacity: 0;
 }

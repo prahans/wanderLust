@@ -2,10 +2,32 @@ const Listing = require("../models/Listing");
 const { cloudinary } = require("../cloudConfig");
 const ExpressError = require("../utils/ExpressError");
 const LISTING_CATEGORIES = require("../utils/listingCategories");
+const { listingQuerySchema } = require("../schema");
 
 module.exports.index = async (req, res) => {
-    const allListings = await Listing.find();
-    res.render("listings/index.ejs", { allListings });
+    const { error, value } = listingQuerySchema.validate(req.query);
+    if (error) {
+      throw new ExpressError(400, error.details.map((detail) => detail.message).join(" "));
+    }
+    const { search, category } = value;
+    const filter = {};
+    if (search) {
+      // Treat punctuation as part of the listing name, not a regular expression.
+      filter.title = { $regex: search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
+    }
+    if (category === "Trending") {
+      filter.isTrending = true;
+    } else if (category) {
+      filter.categories = category;
+    }
+
+    const allListings = await Listing.find(filter);
+    res.render("listings/index.ejs", {
+      allListings,
+      searchTerm: search,
+      selectedCategory: category,
+      listingCategories: LISTING_CATEGORIES,
+    });
   }
 
 
