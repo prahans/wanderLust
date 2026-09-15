@@ -72,24 +72,27 @@ body {
 /* Listing category filters */
 #filters {
   display: flex;
-  gap: 1.25rem;
-  overflow-x: auto;
-  padding: 1rem 0 0.25rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.6rem;
+  padding: 0.75rem 0 0.25rem;
 }
 .filter {
   flex: 0 0 auto;
-  min-width: 4.5rem;
-  padding: 0.75rem 0.25rem;
-  border-bottom: 3px solid transparent;
+  min-width: 3.1rem;
+  padding: 0.45rem 0.2rem;
+  border-bottom: 2px solid transparent;
   color: #222222;
   text-align: center;
   text-decoration: none;
   opacity: 0.7;
 }
+.filter i {
+  font-size: 0.85rem;
+}
 .filter span {
   display: block;
-  margin-top: 0.4rem;
-  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
   white-space: nowrap;
 }
 .filter:hover,
@@ -110,12 +113,48 @@ body {
   font-size: 0.875rem;
 }
 .tax-info {
-  display: none;
+  margin-left: 0.25rem;
+  color: #666666;
+  font-size: 0.75rem;
 }
 .tax-toggle {
-  border: 1px solid #222222;
-  border-radius: 1rem;
-  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #dddddd;
+  border-radius: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  min-height: 2rem;
+  font-size: 0.75rem;
+}
+.tax-toggle .form-check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+.tax-rate {
+  padding: 0.1rem 0.25rem;
+  border-radius: 0.25rem;
+  background-color: #f5f5f5;
+  color: #666666;
+  font-size: 0.65rem;
+}
+.tax-toggle .form-check-input {
+  float: none;
+  flex-shrink: 0;
+  width: 1.65rem;
+  height: 0.9rem;
+  margin: 0;
+  cursor: pointer;
+}
+.tax-toggle .form-check-input:checked {
+  background-color: #fe424d;
+  border-color: #fe424d;
+}
+.tax-toggle .form-check-input:focus {
+  border-color: #fe424d;
+  box-shadow: 0 0 0 0.15rem rgb(254 66 77 / 15%);
 }
 .card-img-overlay {
   opacity: 0;

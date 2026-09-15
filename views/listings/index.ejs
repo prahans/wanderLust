@@ -51,11 +51,12 @@
       <a href="/listings" class="clear-filters">Clear filters</a>
     <% } %>
   </div>
-  <div class="tax-toggle">
-    <div class="form-check-reverse form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-      <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-    </div>
+  <div class="tax-toggle form-switch" title="Show nightly prices including 18% tax">
+    <label class="form-check-label" for="switchCheckDefault">
+      <i class="fa-solid fa-receipt" aria-hidden="true"></i>
+      Total after taxes <span class="tax-rate">18%</span>
+    </label>
+    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
   </div>
 </div>
 
@@ -76,8 +77,8 @@
           <div class="card-body">
             <p class="card-text">
               <b><%= listing.title %></b><br />
-              &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-              <i class="tax-info">&nbsp; &nbsp;+18% GST</i>
+              &#8377; <span class="listing-price" data-base-price="<%= listing.price %>"><%= listing.price.toLocaleString("en-IN") %></span> / night
+              <span class="tax-info" hidden>incl. 18% tax</span>
             </p>
           </div>
         </div>
@@ -88,9 +89,16 @@
 
 <script>
   const taxSwitch = document.getElementById("switchCheckDefault");
-  taxSwitch.addEventListener("change", () => {
-    for (const info of document.getElementsByClassName("tax-info")) {
-      info.style.display = taxSwitch.checked ? "inline" : "none";
+  const priceFormatter = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 });
+  function updateDisplayedPrices() {
+    for (const price of document.querySelectorAll(".listing-price")) {
+      const basePrice = Number(price.dataset.basePrice);
+      price.textContent = priceFormatter.format(taxSwitch.checked ? basePrice * 1.18 : basePrice);
     }
-  });
+    for (const info of document.getElementsByClassName("tax-info")) {
+      info.hidden = !taxSwitch.checked;
+    }
+  }
+  taxSwitch.addEventListener("change", updateDisplayedPrices);
+  updateDisplayedPrices();
 </script>
